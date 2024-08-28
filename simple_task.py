@@ -6,6 +6,12 @@ import os
 FUNCTIONS = {"add", "update", "delete", "mark-in-progress", "mark-done", "mark-todo", "list"}
 JSON_PATH = os.path.join(os.getcwd(), "tasks.json")
 
+if not os.path.exists(JSON_PATH):
+    dump([], open(JSON_PATH, "w"))
+
+tasks = load(open(JSON_PATH))
+     
+
 class WrongArguments(Exception):
     pass
     
@@ -31,13 +37,27 @@ def argparser() -> dict:
     
     
 def add(description: str) -> None:
-    ...
-    
+    if not isinstance(description, str):
+         raise WrongFunctionArguments
+    if len(tasks) >= 1:
+         id = tasks[-1]["id"] + 1
+    else:
+         id = 1
+    tasks.append(
+                     {
+                           "id": id,
+                           "status": "todo",
+                           "description": description,
+                           "created_at": datetime.now(),
+                           "updated_at": datetime.now()
+                     }
+    )
+
+
+
+
     
  def main():
-     if not os.path.exists(JSON_PATH):
-         dump([], open(JSON_PATH, "w"))
-     
      func, arguments = argparser()
      function = globals()[func]
      
