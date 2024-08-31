@@ -62,12 +62,57 @@ def add(description: str) -> None:
     )
 
 
+def update(id: int, description: str) -> None:
+    for task in tasks:
+        if task["id"] == id:
+            task["description"] = description
+            task["updated_at"] = datetime.now()
+            break
+
+
+def mark_in_progress(id: int) -> None:
+    for task in tasks:
+        if task["id"] == id:
+            task["status"] = "in-progress"
+            task["updated_at"] = datetime.now()
+            break
+    
+
+def mark_done(id: int) -> None:
+    for task in tasks:
+        if task["id"] == id:
+            task["status"] = "done"
+            task["updated_at"] = datetime.now()
+            break
+
+
+def mark_todo(id: int) -> None:
+    for task in tasks:
+        if task["id"] == id:
+            task["status"] = "todo"
+            task["updated_at"] = datetime.now()
+            break
+
+
+def delete(id: int) -> None:
+    for task in tasks:
+        if task["id"] == id:
+            tasks.remove(task)
+            break
+
+
+def list(status: str | None = None) -> list:
+    if not status:
+        return tasks
+    return [task for task in tasks if task["status"] == status]
+
+
 def main():
     func, arguments = argparser()
     function = globals()[func]
 
     try:
-        function(arguments)
+        function(*arguments)
     except Exception:
         raise WrongFunctionArguments(function)
 

@@ -7,7 +7,6 @@ def test_add():
 
 
 def test_update():
-    simple_task.add("test")
     simple_task.update(1, "updated")
     assert simple_task.tasks[-1]["description"] == "updated"
 
@@ -28,7 +27,7 @@ def test_list():
 
 def test_list_mark_todo():
     simple_task.mark_todo(1)
-    assert simple_task.list() == simple_task.tasks
+    assert simple_task.list("todo") == simple_task.tasks
 
 
 def test_delete():
@@ -54,8 +53,8 @@ def test_argparser_wrong_arguments():
 def test_argparser_wrong_function_arguments():
     simple_task.argv = ["simple_task.py", "add", "test", "wrong"]
     try:
-        simple_task.argparser()
-    except simple_task.WrongArguments:
+        simple_task.main()
+    except simple_task.WrongFunctionArguments:
         assert True
     else:
         assert False
